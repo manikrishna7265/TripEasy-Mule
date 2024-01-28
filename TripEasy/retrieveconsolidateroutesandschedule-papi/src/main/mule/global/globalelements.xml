@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	
+	<http:listener-config name="retrieveconsolidateroutesandschedule-xapi-httpListenerConfig">
+        <http:listener-connection host="${http.listener.host}" port="${http.listener.port}" readTimeout="80000"/>
+    </http:listener-config>
+    
+    <http:request-config name="HTTP_Request_configuration-fastgo" doc:name="HTTP Request configuration" doc:id="aed75c8c-0a3b-470f-baec-f6d9a5330651" >
+		<http:request-connection host="${http.requester.fastgo.host}" port="${http.requester.fastgo.port}" connectionIdleTimeout="80000"/>
+	</http:request-config>
+	
+    
+    <apikit:config name="retrieveconsolidateroutesandschedule-xapi-config" api="retrieveconsolidateroutesandschedule-xapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<configuration doc:name="Configuration" doc:id="55b0502b-4df2-444f-a7d4-290fb5a5fee8" defaultErrorHandler-ref="error-handler-flow" />
+	<configuration-properties doc:name="Configuration properties" doc:id="b3267e0a-b225-4a24-82de-abeff4d9474a" file="config\local.yaml" />
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="98a01eb3-df4c-4a5a-8a17-467614472020" maxEntries="1000" entryTtl="10" entryTtlUnit="MINUTES" expirationInterval="10" />
+	
+	
+	
+	
+</mule>

@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_03b31c28_fde3_4c80_bd45_2ea19a7b2bd5_Output_Payload = Array<{  companyCode: String,   availableSeats: Number,   departureDateTime: String,   travelRoute: {    destinationLocation: {      locationDesc: String,       locationcode: String,       _?: Any    },     originLocation: {      locationDesc: String,       locationcode: String,       _?: Any    },     _?: Any  },   _?: Any}>
+

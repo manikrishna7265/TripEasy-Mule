@@ -1,0 +1,18 @@
+%dw 2.0
+
+type auto_a50a203c_5595_4a3c_85ba_1424e4146c36_Output_Payload = {|
+  companyCode: Null, 
+  avilableSeats: Any, 
+  departureDateTime: Any, 
+  travelRoute: {|
+    destinationLocation: {|
+      locationCode: Null, 
+      locationDesc: String
+    |}, 
+    originLocation: {|
+      locationcode: Null, 
+      locationDesc: String
+    |}
+  |}
+|}
+

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    
+    <flow name="retrieveconsolidateroutesandschedule-sapi-main">
+        <http:listener config-ref="retrieveconsolidateroutesandschedule-sapi-httpListenerConfig" path="/api/*">
+            <http:response>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[{
+	"status" :  "critical error"
+}]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="retrieveconsolidateroutesandschedule-sapi-config" />
+    </flow>
+    <flow name="retrieveconsolidateroutesandschedule-sapi-console">
+        <http:listener config-ref="retrieveconsolidateroutesandschedule-sapi-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="retrieveconsolidateroutesandschedule-sapi-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <sub-flow name="retrieveconsolidateroutesandschedule-sapi-InitialiseRequestVariable-Sub_Flow" doc:id="14fdb184-6389-4955-9f8a-ed22910f312b" >
+		<ee:transform doc:name="Transform Message" doc:id="cf70f250-675b-48bd-a174-0408489bacc0" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="transactionId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.transactionId]]></ee:set-variable>
+				<ee:set-variable variableName="transportName" ><![CDATA[attributes.uriParams.'transportName']]></ee:set-variable>
+				<ee:set-variable variableName="transportType" ><![CDATA[attributes.uriParams.'transportType']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<flow name="get:\(transportType)\(transportName)\routes:retrieveconsolidateroutesandschedule-sapi-config">
+		<flow-ref doc:name="calling-retrieveconsolidateroutesandschedule-sapi" doc:id="c6adbc4d-f97b-4f15-ab5d-8625aae27f8a" name="retrieveconsolidateroutesandschedule-sapi-InitialiseRequestVariable-Sub_Flow"/>
+		<logger level="INFO" doc:name="Request recieved for Routes TravelOnTrip SAPI" doc:id="fcfa419d-a19e-4c23-bc2a-ed8356f7d62d" message='"Request recieved for Routes TravelOnTrip SAPI For TransactionId" : #[vars.transactionId]'/>
+		<flow-ref doc:name="calling-travelontrip-getroutes-implSub_Flow" doc:id="8318c2bf-7930-4c14-a55a-87595237b088" name="travelontrip-getroutes-implSub_Flow"/>
+    </flow>
+    <sub-flow name="retrieveconsolidateroutesandschedule-sapi-Initialise-Request-Variables-Sub_Flow" doc:id="b60a72a5-595b-4814-8786-10029368f4b3" >
+		<ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="transportType"><![CDATA[attributes.uriParams.'transportType']]></ee:set-variable>
+                <ee:set-variable variableName="transportName"><![CDATA[attributes.uriParams.'transportName']]></ee:set-variable>
+				<ee:set-variable variableName="trasactionId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.transactionId]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+	</sub-flow>
+	<flow name="get:\(transportType)\(transportName)\schedules:retrieveconsolidateroutesandschedule-sapi-config">
+		<flow-ref doc:name="retrieveconsolidateroutesandschedule-sapi-Initialise-Request" doc:id="1d4942d7-a0ad-4be8-860a-20f8e0c2f71e" name="retrieveconsolidateroutesandschedule-sapi-Initialise-Request-Variables-Sub_Flow"/>
+		<logger level="INFO" doc:name="Request recieved for Schedules TravelOnTrip SAPI" doc:id="fb07224d-0f47-4513-be6d-9c5d59069ea6" message='"Request recieved for Schedules TravelOnTrip SAPI For TransactionId" : #[vars.transactionId]'/>
+		<flow-ref doc:name="calling-travelontrip-getschedules-implSub_Flow" doc:id="acffc39c-dba7-4cb6-b1fd-4b67eea6db9f" name="travelontrip-getschedules-implSub_Flow"/>
+    </flow>
+</mule>

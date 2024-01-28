@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_a16c134a_b86b_4f57_9763_d95cc030bee8_Output_Variables_transportcompanyName = Any
+

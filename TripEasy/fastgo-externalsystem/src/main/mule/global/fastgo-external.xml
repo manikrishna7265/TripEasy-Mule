@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	
+	<flow name="traveltrip-externalFlow" doc:id="21e9fd4a-2761-40f5-9afc-ba7da0bb87cd" >
+		<http:listener doc:name="Listener" doc:id="bcf252e3-e9da-4cb3-9795-9cc3ac4ccdff" path="${http.listener.path}" config-ref="HTTP_Listener_config">
+		</http:listener>
+		<ee:transform doc:name="Transform Message" doc:id="ffc69545-2f31-4f22-8c4b-68983e76515d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="serviceType" ><![CDATA[%dw 2.0
+output application/json
+---
+attributes.uriParams.serviceType]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<choice doc:name="Choice" doc:id="c0c88004-3782-4577-b2dd-9b438910b673" >
+			<when expression='#[vars.serviceType =="routes"]'>
+				<flow-ref doc:name="calling-Route-implSub_Flow" doc:id="422c0f8e-83f8-4fc6-9983-00423370fdbc" name="Route-implSub_Flow"/>
+			</when>
+			<when expression='#[vars.serviceType == "schedules"]'>
+				<flow-ref doc:name="calling-TravelOnTrip-scheduleSub_Flow" doc:id="b926fc49-720c-4cfe-8383-f2aa1e9cda03" name="TravelOnTrip-scheduleSub_Flow"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="6ceb07c9-e6d9-4abe-a935-2bdae2d98631" message="URI parameter not correct"/>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="bb58dfdc-127d-48ab-994b-4eba46c89937" message="after choice"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="520da5a0-3d54-40ec-b57a-05256efb26d3" >
+				<logger level="ERROR" doc:name="Logger" doc:id="b37ec644-fb7d-4d56-bc4e-324cc7aefb47" message="Error occured on travelOnTrip system"/>
+				<ee:transform doc:name="Transform Message" doc:id="3fa2db31-b362-4329-8338-3359a83c198c" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="errorMsg" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Error Msg" : "Error in TravelOnTrip"
+}]]></ee:set-variable>
+						<ee:set-variable variableName="statusCode" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"ErrorCode" : "XE1023"
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

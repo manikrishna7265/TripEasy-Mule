@@ -1,0 +1,96 @@
+#%RAML 1.0
+title: RetrieveConsolidateRoutesAndSchedule TravelOnTrip FastGo SAPI
+description: This RAML will fetch Route and schedule from FastGo Transport provider.
+
+/{transportType}:
+  /{transportCompany}:
+    /routes:
+      get:
+        headers:
+          TransactionId:
+            required: true
+            type: string
+            example: "krishna"
+        responses:
+          200:
+            body:
+              application/json:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    departureLocationCode:
+                      required : true
+                      type: string
+                      example: "BCN-AL"
+                    arrivalLocationCode:
+                      required: true
+                      type: string
+                      example: "KLG-MY"
+                example:
+                   [
+                     {
+                       "departureLocationCode" : "BCN-SG",
+                       "arrivalLocationCode" : "KLG-MY"
+                     },
+                     {
+                       "departureLocationCode" : "BCN-SG",
+                       "arrivalLocationCode" : "KLG-MY"
+                     }
+                   ]  
+    /schedules:
+      get:
+        headers:
+          transactionId:
+            required: true
+            type: string
+            example: "jshgdjasl"
+        queryParameters:
+          departureLocationCode:
+            required: false
+            type: string 
+            example: "BCN-SG"
+          destinationLocationCode:
+            required: false
+            type: string 
+            example: "BCN-MY"
+        responses:
+          200:
+            body:
+              application/json:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    departureDateTime:
+                      required: true
+                      type: string
+                      example: "2019-04-10T15:44:55"
+                    fromLocation:
+                      required: true
+                      type: string
+                      example: "BCN_MY"
+                    toLocation:
+                      required: true
+                      type: string
+                      example: "BCN-MY"
+                    availableSeats:
+                      required: true
+                      type: number
+                      example: 4
+                    
+                example:
+                      [
+                        {
+                          "departureDateTime" : "2019-07-28T12:45:34Z",
+                          "fromLocation" : "BCN-SG",
+                          "toLocation" : "KLG-My",
+                          "availableSeats" : 50
+                        },
+                        {
+                          "departureDateTime" : "2019-07-28T12:45:34Z",
+                          "fromLocation" : "BCN-SG",
+                          "toLocation" : "KLG-My",
+                          "availableSeats" : 50
+                        }
+                        ]

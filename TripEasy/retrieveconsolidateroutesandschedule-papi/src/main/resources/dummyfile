@@ -1,0 +1,58 @@
+%dw 2.0
+output application/json
+var LocationMapping = (readUrl("classPath://json/LocationCodeMapping.json","application/json"))
+---
+payload map(value, index)->(
+	{
+		"companyCode" : vars.transportcompanyName,
+		"originLocation":{
+			"locationCode" : value.originLocation.locationCode,
+			"locationDesc" : (LocationMapping filter($.locationCode == value.originLocation.locationCode))[0].locationDesc
+		},
+		"destiinationLocation":{
+			"locationCode" : value.destinSationLocation.locationLcode,
+			"locationDesc" : (LocationMapping filter($.locationCode == value.destinationLocation.locationCode))[0].locationDesc,
+			"transportType" : vars.transportType
+		}
+	}
+)
+
+
+
+%dw 2.0
+output application/json
+var LocationMapping = readUrl("classpath://json/LocationCodeMapping.json","application/json")
+---  
+payload map (value, index) -> (
+    {
+        "OriginLocation" : {
+            "locationCode" : value.originLocation.locationCode,
+            "locationDesc" : (LocationMapping filter($.locationCode == value.originLocation.locationCode))[0].locationDesc
+        },
+        "destinationLocation" : {
+            "locationCode" : value.destinationLocation.locationCode,
+            "locationDesc" : (LocationMapping filter ($.locationCode == value.destinationLocation.locationCode))[0].locationDesc
+        }
+    }
+)
+
+
+
+
+
+%dw 2.0
+output application/json
+var LocationMapping = readUrl("classpath://json/LocationCodeMapping.json","application/json")
+---  
+payload map (value, index) -> (
+    {
+        "OriginLocation" : {
+            "locationCode" : value.originLocation.locationCode,
+            "locationDesc" : (LocationMapping filter($.locationCode == value.originLocation.locationCode))[0].locationDesc
+        },
+        "destinationLocation" : {
+            "locationCode" : value.destinationLocation.locationCode,
+            "locationDesc" : (LocationMapping filter ($.locationCode == value.destinationLocation.locationCode))[0].locationDesc
+        }
+    }
+)

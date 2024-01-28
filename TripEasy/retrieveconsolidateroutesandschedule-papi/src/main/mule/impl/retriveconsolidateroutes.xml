@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+	<ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy" doc:id="57c39ea7-6045-41ba-a7f7-93f1130f63d2" objectStore="Object_store" keyGenerationExpression='#[vars.transportType ++ vars.transportcompanyName ++ "Routes"]'/>
+	<sub-flow name="travelOnTrip-router-cache-subflow" doc:id="66239ef5-ed41-4746-a542-be895f32a968" >
+		<set-variable value="#[%dw 2.0&#10;output application/json&#10;---&#10;&quot;/api/&quot; ++ (vars.transportType default &quot;Bus&quot;) ++ p('http.requester.travelOnTrip.routerPath')]" doc:name="TravelOnTrip-router-resourcePath" doc:id="75eda087-1359-4a1d-bfc5-a31ab6393211" variableName="resourcePath" />
+		<ee:cache doc:name="Cache" doc:id="fc195d11-22f4-4bd7-98df-16e5da7ad75f" cachingStrategy-ref="Caching_Strategy">
+					<http:request method="GET" doc:name="TravelOnTrip-router-request" doc:id="c6ddfbf7-9353-4b94-8eaf-5da8c3e22688" config-ref="HTTP_Request_configuration-travelontrip" path="#[vars.resourcePath]">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	TransactionId : vars.transactionId
+}]]]></http:headers>
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	transportType : vars.transportType
+}]]]></http:uri-params>
+				</http:request>
+					<ee:transform doc:name="Transform Message" doc:id="7fca18e0-72e9-4bb7-9a9b-5a62f643f4be">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var LocationMapping = readUrl("classpath://json/LocationCodeMapping.json","application/json")
+---  
+payload map (value, index) -> (
+    {
+        "OriginLocation" : {
+            "locationCode" : value.originLocation.locationCode,
+            "locationDesc" : (LocationMapping filter($.locationCode == value.originLocation.locationCode))[0].locationDesc
+        },
+        "destinationLocation" : {
+            "locationCode" : value.destinationLocation.locationCode,
+            "locationDesc" : (LocationMapping filter ($.locationCode == value.destinationLocation.locationCode))[0].locationDesc
+        }
+    }
+)]]></ee:set-payload></ee:message></ee:transform>
+					<logger level="INFO" doc:name="Logger" doc:id="26f50ec3-16c5-4e1b-83f0-3c844d353daa" message='#[%dw 2.0&#10;output application/json&#10;---&#10;vars.transportType ++ vars.transportcompanyName ++ "Routes cache is cmpt"]' />
+				</ee:cache>
+	</sub-flow>
+	<sub-flow name="fastgo-router-cache-subflow" doc:id="b5168af6-4112-448c-adcd-a264f4218fb2" >
+		<set-variable value="#[%dw 2.0&#10;output application/json&#10;---&#10;&quot;/api/&quot; ++ (vars.transportType default &quot;Bus&quot;) ++ p('http.requester.fastgo.routerPath')]" doc:name="Fastgo-router-resourcePath" doc:id="ad83e136-04cb-4f26-b0b6-310f244667ed" variableName="resourcesPath" />
+		<ee:cache doc:name="Cache" doc:id="8bd455b8-382b-4c17-aafc-e8d86b8d2413" cachingStrategy-ref="Caching_Strategy">
+
+					<http:request method="GET" doc:name="fastgo-router-request" doc:id="c5727de5-5327-4f8a-b6f9-a22f8afd15ca" config-ref="HTTP_Request_configuration-fastgo" path="#[vars.resourcesPath]">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	TransactionId : vars.transactionId
+}]]]></http:headers>
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	transportType : vars.transportType
+}]]]></http:uri-params>
+				</http:request>
+					<ee:transform doc:name="Transform Message" doc:id="c8fa759f-8c5d-4d36-a053-b642c4a5eb13">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var LocationMapping = readUrl("classpath://json/LocationCodeMapping.json","application/json")
+
+---
+payload map(value, index)->(
+	{
+		"companyCode" : vars.transportcompanyName,
+		"originLocation":{
+			"locationCode" : value.originLocation.locationCode,
+			"locationDesc" : (LocationMapping filter($.locationCode == value.originLocation.locationCode))[0].locationDesc
+		},
+		"destiinationLocation":{
+			"locationCode" : value.destinSationLocation.locationLcode,
+			"locationDesc" : (LocationMapping filter($.locationCode == value.destinationLocation.locationCode))[0].locationDesc,
+			"transportType" : vars.transportType
+		}
+	}
+)
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+					<logger level="INFO" doc:name="Logger" doc:id="49a5c9bb-b485-428a-a95e-77405f805575" message='#[%dw 2.0&#10;output application/json&#10;---&#10;vars.transportType ++ vars.transportcompanyName ++ "Schedule cache cmpt"]' />
+				</ee:cache>
+	</sub-flow>
+	<sub-flow name="retriveconsolidaterouteSub_Flow" doc:id="2e777b7e-a16c-4ea6-afb2-f63a4e89b5c3" >
+		<choice doc:name="Choice" doc:id="9904613c-b0bf-42c1-a055-8eb14fbd86ee">
+			<when expression='#[vars.transportcompanyName == "FastGo"]'>
+				<flow-ref doc:name="calling-fastgo-router-cache-subflow" doc:id="a07b7e0b-3f18-44c7-8f41-be3282616a52" name="fastgo-router-cache-subflow" />
+			</when>
+			<when expression='#[vars.transportcompanyName == "TravelOnTrip"]'>
+				<flow-ref doc:name="calling-travelOnTrip-router-cache-subflow" doc:id="ba54a4c2-c897-4b0d-bd46-3a3880df522e" name="travelOnTrip-router-cache-subflow" />
+			</when>
+			<otherwise >
+				<scatter-gather doc:name="Scatter-Gather" doc:id="e8d842b8-a6d3-4192-8ca9-2550b2bc12a5">
+					<route>
+						<set-variable value='#["FastGo"]' doc:name="Set Variable" doc:id="08ff611c-114d-434c-bec4-ba7a24680faf" variableName="transportcompanyName" />
+						<flow-ref doc:name="calling-fastgo-router-cache-subflow" doc:id="a73782b2-fab7-4229-9dd5-dddb8ced2a21" name="fastgo-router-cache-subflow" />
+					</route>
+					<route>
+						<set-variable value='#["TravelOnTrip"]' doc:name="Set Variable" doc:id="01a3dde2-75d1-4c25-8341-23ff8e739451" variableName="transportcompanyName" />
+						<flow-ref doc:name="calling-travelOnTrip-router-cache-subflow" doc:id="9d0bf537-c599-4552-a6bf-fa9ddaee630b" name="travelOnTrip-router-cache-subflow" />
+					</route>
+				</scatter-gather>
+				<logger level="INFO" doc:name="Logger" doc:id="819dd606-5d56-4b58-a75a-77a0d03e7a37" message="#[%dw 2.0&#10;output application/json&#10;---&#10;(payload.'0'.payload default []) ++ (payload.'1'.payload default [])]" />
+				<set-payload value="#[%dw 2.0&#10;output application/json&#10;---&#10;(payload.'0'.payload default []) ++ (payload.'1'.payload default [])]" doc:name="Set Payload" doc:id="0176856c-f37c-4b22-a26c-8e1e91a17619" />
+			</otherwise>
+		</choice>
+		</sub-flow>
+		</mule>

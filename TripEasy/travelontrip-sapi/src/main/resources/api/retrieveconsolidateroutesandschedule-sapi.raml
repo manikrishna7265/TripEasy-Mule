@@ -1,0 +1,136 @@
+#%RAML 1.0
+title: RetrieveConsolidateRoutesAndSchedule TravelOnTrip SAPI
+description: This API will fectch routers and schedules from TravilonTrip API
+
+traits:
+  standard-error-reponses : !include  /exchange_modules/e83bf6bb-25af-4145-9336-428543f0a7ce/fragments-api/1.0.0/standarderrorresponse.raml
+  client-credentials-required: !include /exchange_modules/e83bf6bb-25af-4145-9336-428543f0a7ce/fragments-api/1.0.0/credentials.raml
+
+/{transportType}:
+  /{transportName}:
+    /routes:
+      get:
+        headers:
+          transactionId:
+            required: true
+            type: string
+            example: "skhdfkwkwjedlkedifjklscls"
+        responses:
+          200:
+            body:
+              application/json:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    originLocation:
+                      type: object
+                      properties:
+                        locationCode: 
+                          required: true
+                          type: string
+                          example: "BEN-SG"
+                    destinationLocation:
+                      type: object
+                      properties:
+                        locationCode: 
+                          required: true
+                          type: string
+                          example: "BEN-SG"
+                example:
+                  [
+                    {
+                      "originLocation": {
+                        "locationCode": "BEN-SG"
+                      },
+                      "destinationLocation": {
+                        "locationCode": "KLG-MY"
+                      }
+                    },
+                    {
+                      "originLocation": {
+                        "locationCode": "BEN-SG"
+                      },
+                      "destinationLocation": {
+                        "locationCode": "KLG-MY"
+                      }
+                    }
+                  ]   
+
+    /schedules:
+      get:
+        headers:
+          transactionId:
+            required: true
+            type: string
+            example: "jshgdjasl"
+        queryParameters:
+          departureLocationCode:
+            required: false
+            type: string 
+            example: "kjsdhfkds"
+          destinationLocationCode:
+            required: false
+            type: string 
+            example: "kjsdhfkds"
+        responses:
+          200:
+            body:
+              application/json:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    availableSeats:
+                      required: true
+                      type: number
+                      example: 4
+                    departureDateTime:
+                      required: true
+                      type: string
+                      example: "2019-04-10T15:44:55"
+                    travelRoute:
+                      type: object
+                      properties:
+                        destinationLocation:
+                          type: object
+                          properties:
+                            locationCode: 
+                              required: true
+                              type: string
+                              example: "KLG-MY"
+                        originlocation:
+                          type: object
+                          properties:
+                            locationCode:
+                              required: true
+                              type: string
+                              example: "BCN-SG"
+                example:
+                  [
+                    {
+                      "availableSeats" : 20,
+                      "departureDateTime" : "2019-04-10T15:44:55",
+                      "travelRoute" : {
+                        "destinationLocation" :{
+                          "locationCode" : "KLG-MY"
+                      },
+                      "originlocation":{
+                          "locationCode" : "BCN-SG"          
+                      }
+                    }
+                  },
+                   {
+                      "availableSeats" : 20,
+                      "departureDateTime" : "2019-04-10T15:44:55",
+                      "travelRoute" : {
+                        "destinationLocation" :{
+                          "locationCode" : "KLG_MY"
+                      },
+                      "originlocation":{
+                          "locationCode" : "BCN-SG"          
+                      }
+                    }
+                  }
+                  ]         
+

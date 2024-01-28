@@ -1,0 +1,20 @@
+http:
+  listener:
+    host: "localhost"
+    port: "9095"
+  requester:  
+    fastgo:
+      host: "localhost"
+      port: "9093"
+      routerPath: "/FastGo/routes"
+      schedulesPath: "/FastGo/schedules"
+    travelOnTrip:
+      host: "localhost"
+      port: "9090"
+      routerPath: "/TravelOnTrip/routes"
+      schedulesPath: "/TravelOnTrip/schedules"
+
+        
+
+  
+    

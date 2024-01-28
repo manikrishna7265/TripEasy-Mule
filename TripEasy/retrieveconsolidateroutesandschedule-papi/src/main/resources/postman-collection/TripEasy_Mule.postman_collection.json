@@ -1,0 +1,474 @@
+{
+	"info": {
+		"_postman_id": "4afdc913-70b6-42f0-a3fe-990c47465e07",
+		"name": "TripEasy_Mule",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19135502",
+		"_collection_link": "https://blue-escape-849932.postman.co/workspace/95e1616e-16e4-480c-85a2-93c380cb9292/collection/19135502-4afdc913-70b6-42f0-a3fe-990c47465e07?action=share&source=collection_link&creator=19135502"
+	},
+	"item": [
+		{
+			"name": "External-API-fastGo-routes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "TransactionId",
+						"value": "jdfkkejrf",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9093/api/bus/FastGo/routes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9093",
+					"path": [
+						"api",
+						"bus",
+						"FastGo",
+						"routes"
+					],
+					"query": [
+						{
+							"key": "companyName",
+							"value": "FastGo",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "External-API-fastGo-Schedule",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/FastGoCall/schedules?companyName=FastGo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"FastGoCall",
+						"schedules"
+					],
+					"query": [
+						{
+							"key": "companyName",
+							"value": "FastGo"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "External-API-TravelAndGO-schedule",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/TravelOnTripCall/routes?companyName=FastGo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"TravelOnTripCall",
+						"routes"
+					],
+					"query": [
+						{
+							"key": "companyName",
+							"value": "FastGo"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "External-API-TravelTrip-routes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/TravelOnTripCall/routes?companyName=FastGo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"TravelOnTripCall",
+						"routes"
+					],
+					"query": [
+						{
+							"key": "companyName",
+							"value": "FastGo"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "travelontrip-sapi-routes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "transactionId",
+						"value": "skhdfkwkwjedlkedifjklscls",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9090/api/bus/TravelOnTrip/routes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"bus",
+						"TravelOnTrip",
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "travelontrip-sapi-schedules",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "transactionId",
+						"value": "sjdkfhwkfkwj",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9090/api/bus/TravelOnTrip/schedules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"bus",
+						"TravelOnTrip",
+						"schedules"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FastGo-sapi-schedules",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "TransactionId",
+						"value": "jkdksdksj",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9093/api/bus/FastGo/schedules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9093",
+					"path": [
+						"api",
+						"bus",
+						"FastGo",
+						"schedules"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FastGo-sapi-routes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "TransactionId",
+						"value": "dnkjnf",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9093/api/bus/FastGo/schedules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9093",
+					"path": [
+						"api",
+						"bus",
+						"FastGo",
+						"schedules"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TripEasy-FastGO-PAPI-schedule",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "transactionId",
+						"value": "kjdahwkdhwidkdndkwckxnsdhcba",
+						"type": "text"
+					},
+					{
+						"key": "client_id",
+						"value": "krishnaertyuiolkjhgd456uyfggj",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "manijghxchg84654846jbdxgfch4g",
+						"type": "text"
+					},
+					{
+						"key": "transportType",
+						"value": "bus",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9095/api/booking/bus/schedule?departureLocation=BEN&destinationLocation=GN&transportcompanyName=FastGo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9095",
+					"path": [
+						"api",
+						"booking",
+						"bus",
+						"schedule"
+					],
+					"query": [
+						{
+							"key": "departureLocation",
+							"value": "BEN"
+						},
+						{
+							"key": "destinationLocation",
+							"value": "GN"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "transportcompanyName",
+							"value": "FastGo"
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TripEasy-FastGo-PAPI-routes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "transactionId",
+						"value": "kjdahwkdhwidkdndkwckxnsdhcba",
+						"type": "text"
+					},
+					{
+						"key": "client_id",
+						"value": "krishnaertyuiolkjhgd456uyfggj",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "manijghxchg84654846jbdxgfch4g",
+						"type": "text"
+					},
+					{
+						"key": "transportType",
+						"value": "bus",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9095/api/booking/bus/routes?departureLocation=BEN&destinationLocation=GN&transportcompanyName=FastGo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9095",
+					"path": [
+						"api",
+						"booking",
+						"bus",
+						"routes"
+					],
+					"query": [
+						{
+							"key": "departureLocation",
+							"value": "BEN"
+						},
+						{
+							"key": "destinationLocation",
+							"value": "GN"
+						},
+						{
+							"key": "transportcompanyName",
+							"value": "FastGo"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TripEasy-TravelOnTrip-PAPI-routes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "transactionId",
+						"value": "kjdahwkdhwidkdndkwckxnsdhcba",
+						"type": "text"
+					},
+					{
+						"key": "client_id",
+						"value": "krishnaertyuiolkjhgd456uyfggj",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "manijghxchg84654846jbdxgfch4g",
+						"type": "text"
+					},
+					{
+						"key": "transportType",
+						"value": "bus",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9095/api/booking/bus/routes?departureLocation=BEN&destinationLocation=GN&transportcompanyName=TravelOnTrip",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9095",
+					"path": [
+						"api",
+						"booking",
+						"bus",
+						"routes"
+					],
+					"query": [
+						{
+							"key": "departureLocation",
+							"value": "BEN"
+						},
+						{
+							"key": "destinationLocation",
+							"value": "GN"
+						},
+						{
+							"key": "transportcompanyName",
+							"value": "TravelOnTrip"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TripEasy-TravelOnTrip-PAPI-schedule",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "transactionId",
+						"value": "kjdahwkdhwidkdndkwckxnsdhcba",
+						"type": "text"
+					},
+					{
+						"key": "client_id",
+						"value": "krishnaertyuiolkjhgd456uyfggj",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "manijghxchg84654846jbdxgfch4g",
+						"type": "text"
+					},
+					{
+						"key": "transportType",
+						"value": "bus",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9095/api/booking/bus/schedule?departureLocation=BEN&destinationLocation=GN&transportcompanyName=travelOnTrip",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9095",
+					"path": [
+						"api",
+						"booking",
+						"bus",
+						"schedule"
+					],
+					"query": [
+						{
+							"key": "departureLocation",
+							"value": "BEN"
+						},
+						{
+							"key": "destinationLocation",
+							"value": "GN"
+						},
+						{
+							"key": "transportcompanyName",
+							"value": "travelOnTrip"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

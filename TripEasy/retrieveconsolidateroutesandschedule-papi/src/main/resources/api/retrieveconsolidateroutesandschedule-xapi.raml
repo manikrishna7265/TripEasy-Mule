@@ -1,0 +1,138 @@
+#%RAML 1.0
+title: RetrieveConsolidateRoutesAndSchedule WebApp XPAPI
+description: This RAML file will retrieve consolidates routes and schdulers for Process API.
+
+traits:
+  standard-error-reponses : !include  /exchange_modules/e83bf6bb-25af-4145-9336-428543f0a7ce/fragments-api/1.0.0/standarderrorresponse.raml
+  client-credentials-required: !include /exchange_modules/e83bf6bb-25af-4145-9336-428543f0a7ce/fragments-api/1.0.0/credentials.raml
+
+/booking:
+  /{transportType}:
+    /routes:
+      get:
+        is: [client-credentials-required]
+        headers:
+          transactionId:
+            required: true
+            type: string
+            example: "kjdahwkdhwidkdndkwckxnsdhcba"
+        queryParameters:
+          companyName:
+            required: false
+            type: string
+            example: "fastGO"
+          departureLocation:
+            required: false
+            type: string
+            example: "BEN"
+          DestinationLocation:
+            required: false
+            type: string
+            example: "SG"
+        responses:
+          200:
+            body:
+              application/json:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    companyCode:
+                      type: string
+                      example: "Transactional"
+                      required: true
+                    originLocation:
+                      type: object
+                      properties:
+                        locationCode:
+                          type: string
+                          example: "BEN-SG"
+                          required: true
+                        locationDesc:
+                          type: string
+                          example: "Beauna Vista Singpore"
+                          required: true
+                    destinationLocation:
+                      type: object
+                      properties:
+                        locationCode:
+                          type: string
+                          example: "KIG-MY"
+                          required: true
+                        locationDesc:
+                          type: string
+                          example: "Klang Malaysia"
+                          required: true
+    /schedule:
+      get:
+        is: [client-credentials-required]
+        headers:
+          transactionId:
+            required: true
+            type: string
+            example: "kjdahwkdhwidkdndkwckxnsdhcba"
+        queryParameters:
+          companyName:
+            required: false
+            type: string
+            example: "fastGO"
+          departureLocation:
+            required: false
+            type: string
+            example: "BEN"
+          DestinationLocation:
+            required: false
+            type: string
+            example: "SG"
+          requestTimezone:
+            required: false
+            type: string
+            example: ""
+        responses:
+          200:
+            body:
+              application/json:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    companyCode:
+                      type: string
+                      example: "TransNational"
+                      required: true
+                    availableSeats:
+                      type: number
+                      example: 20
+                      required: true
+                    departureDateTime:
+                      type: string
+                      example: "2014-12-10T06:23:16"
+                      required: true
+                    travelRoute:
+                      type: object
+                      properties:
+                        destinationLocation:
+                          type: object
+                          properties:
+                            locationcode:
+                              type: string
+                              example: "BEN-SG"
+                              required: true
+                            locationDesc:
+                              type: string
+                              example: "Beauna Vista Singpore"
+                              required: true
+                        originLocation:
+                          type: object
+                          properties:
+                            locationcode:
+                              type: string
+                              example: "BEN-SG"
+                              required: true
+                            locationDesc:
+                              type: string
+                              example: "Beauna Vista Singpore"
+                              required: true
+
+                     
+
